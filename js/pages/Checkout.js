@@ -78,7 +78,13 @@ function renderCheckout() {
                      oninput="checkoutState.address = this.value">
             </div>
 
-            <button class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--space-md);" onclick="submitCheckout()">
+            <div style="background: rgba(212, 175, 55, 0.1); border-left: 4px solid var(--color-accent); padding: var(--space-md); margin-bottom: var(--space-lg); border-radius: 4px;">
+              <p style="font-size: 0.9rem; margin: 0; color: var(--color-text);">
+                <strong>Note importante</strong> : Une petite avance est requise pour valider votre commande et couvrir les éventuels imprévus lors de la livraison.
+              </p>
+            </div>
+
+            <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="submitCheckout()">
               Confirmer la commande — ${formatPrice(total)}
             </button>
           </div>
@@ -88,7 +94,7 @@ function renderCheckout() {
             ${orderItemsHTML}
             <div class="cart-summary-row">
               <span>Livraison</span>
-              <span style="color: var(--color-success);">Gratuite</span>
+              <span style="color: var(--color-text-dim);">Payable à la livraison</span>
             </div>
             <div class="cart-summary-total">
               <span>Total</span>
@@ -148,6 +154,7 @@ function submitCheckout() {
   });
 
   message += `\n💰 *Total: ${formatPrice(finalTotal)}*`;
+  message += `\n\n⚠️ *Note:* Je suis informé(e) qu'une petite avance est nécessaire pour valider ma commande.`;
 
   const phoneNum = '2250767503829';
   const whatsappUrl = `https://wa.me/${phoneNum}?text=${encodeURIComponent(message)}`;
@@ -164,8 +171,9 @@ function renderConfirmation() {
       <div class="container">
         <div class="confirmation">
           <div class="confirmation-icon">🎉</div>
-          <h2>Commande Confirmée !</h2>
-          <p>Merci pour votre commande. Votre paiement a été reçu avec succès.</p>
+          <h2>Commande Enregistrée !</h2>
+          <p>Merci pour votre commande. Elle sera validée définitivement après la réception de votre avance de paiement.</p>
+          <p style="font-size: 0.9rem; color: var(--color-text-dim); margin-bottom: var(--space-lg);">Vérifiez votre WhatsApp pour les instructions de paiement.</p>
           <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
             <button class="btn btn-primary btn-lg" onclick="resetCheckout(); Router.navigate('/')">
               Retour à l'accueil

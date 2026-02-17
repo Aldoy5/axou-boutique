@@ -70,7 +70,7 @@ function renderCart() {
             </div>
             <div class="cart-summary-row">
               <span>Livraison</span>
-              <span style="color: var(--color-success);">Gratuite</span>
+              <span style="color: var(--color-text-dim);">Calculée à l'étape suivante</span>
             </div>
             <div class="cart-summary-total">
               <span>Total</span>
