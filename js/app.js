@@ -100,14 +100,22 @@ const App = (() => {
 })();
 
 // --- Toast Helper ---
-function showToast(message, type = 'success') {
+function showToast(message, type = 'success', showCartButton = false) {
     // Remove existing toasts
     document.querySelectorAll('.toast').forEach(t => t.remove());
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
-    toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span> ${message}`;
+
+    let content = `<span>${type === 'success' ? '✅' : '⚠️'}</span> <div style="flex: 1;">${message}</div>`;
+
+    if (showCartButton) {
+        content += `<button class="btn btn-sm" style="background: white; color: black; margin-left: 10px; padding: 4px 8px; font-size: 0.75rem;" onclick="Router.navigate('/cart')">VOIR LE PANIER</button>`;
+        // On mobile, sometimes direct redirect is better, but a button in toast is a good compromise
+    }
+
+    toast.innerHTML = content;
     document.body.appendChild(toast);
 
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4000);
 }

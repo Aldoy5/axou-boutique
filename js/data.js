@@ -12,6 +12,7 @@ const DEMO_PRODUCTS = [
     category: 'beaute',
     image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&h=600&fit=crop',
     featured: true,
+    stock: 12,
   },
   {
     id: 'beauty-2',
@@ -21,6 +22,7 @@ const DEMO_PRODUCTS = [
     category: 'beaute',
     image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=600&fit=crop',
     featured: false,
+    stock: 8,
   },
   {
     id: 'beauty-3',
@@ -30,6 +32,7 @@ const DEMO_PRODUCTS = [
     category: 'beaute',
     image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=600&fit=crop',
     featured: true,
+    stock: 5,
   },
   {
     id: 'beauty-4',
@@ -39,6 +42,7 @@ const DEMO_PRODUCTS = [
     category: 'beaute',
     image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&h=600&fit=crop',
     featured: false,
+    stock: 15,
   },
 
   // --- Chaînes / Bijoux ---
@@ -50,6 +54,7 @@ const DEMO_PRODUCTS = [
     category: 'chaines',
     image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=600&fit=crop',
     featured: true,
+    stock: 3,
   },
   {
     id: 'chain-2',
@@ -59,6 +64,7 @@ const DEMO_PRODUCTS = [
     category: 'chaines',
     image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600&h=600&fit=crop',
     featured: false,
+    stock: 20,
   },
   {
     id: 'chain-3',
@@ -68,6 +74,7 @@ const DEMO_PRODUCTS = [
     category: 'chaines',
     image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&h=600&fit=crop',
     featured: true,
+    stock: 7,
   },
   {
     id: 'chain-4',
@@ -77,6 +84,7 @@ const DEMO_PRODUCTS = [
     category: 'chaines',
     image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&h=600&fit=crop',
     featured: false,
+    stock: 10,
   },
 
   // --- Pyjamas ---
@@ -88,6 +96,7 @@ const DEMO_PRODUCTS = [
     category: 'pyjamas',
     image: 'https://images.unsplash.com/photo-1631646109206-4e750a277f63?w=600&h=600&fit=crop',
     featured: true,
+    stock: 4,
   },
   {
     id: 'pyjama-2',
@@ -97,6 +106,7 @@ const DEMO_PRODUCTS = [
     category: 'pyjamas',
     image: 'https://images.unsplash.com/photo-1616627977522-a342ad3ff768?w=600&h=600&fit=crop',
     featured: false,
+    stock: 6,
   },
   {
     id: 'pyjama-3',
@@ -106,6 +116,7 @@ const DEMO_PRODUCTS = [
     category: 'pyjamas',
     image: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=600&fit=crop',
     featured: true,
+    stock: 2,
   },
   {
     id: 'pyjama-4',
@@ -115,6 +126,7 @@ const DEMO_PRODUCTS = [
     category: 'pyjamas',
     image: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&h=600&fit=crop',
     featured: false,
+    stock: 5,
   },
 ];
 

@@ -74,6 +74,12 @@ function renderProductDetail(params) {
             <h1>${product.name}</h1>
             <div class="product-detail-price">${formatPrice(product.price)}</div>
             
+            <div class="product-stock-status" style="margin-bottom: var(--space-md); font-size: 0.9rem;">
+              ${product.stock > 0
+      ? `<span style="color: #4CAF50;">● En stock (${product.stock} disponibles)</span>`
+      : `<span style="color: var(--color-danger);">● Rupture de stock</span>`}
+            </div>
+            
             <div class="product-social-metrics">
               <div class="metric">
                 <span class="metric-icon">👁️</span>
@@ -96,8 +102,8 @@ function renderProductDetail(params) {
               </div>
             </div>
 
-            <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="addDetailToCart('${product.id}')">
-              🛒 Ajouter au panier — ${formatPrice(product.price * detailQuantity)}
+            <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="addDetailToCart('${product.id}')" ${product.stock <= 0 ? 'disabled' : ''}>
+              ${product.stock > 0 ? `🛒 Ajouter au panier — ${formatPrice(product.price * detailQuantity)}` : 'Rupture de stock'}
             </button>
           </div>
         </div>
@@ -114,7 +120,7 @@ function changeDetailQty(delta) {
 
 function addDetailToCart(productId) {
   Store.addToCart(productId, detailQuantity);
-  showToast(`${detailQuantity} article(s) ajouté(s) au panier !`);
+  showToast(`${detailQuantity} article(s) ajouté(s) au panier !`, 'success', true);
   detailQuantity = 1;
   App.refresh();
 }

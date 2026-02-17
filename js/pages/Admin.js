@@ -21,7 +21,13 @@ function renderAdmin() {
            onerror="this.style.background='var(--color-surface)'; this.src=''">
       <div class="admin-product-info">
         <div class="admin-product-name">${p.name}</div>
-        <div class="admin-product-meta">${getCategoryLabel(p.category)} · ${formatPrice(p.price)}</div>
+        <div class="admin-product-meta">
+          ${getCategoryLabel(p.category)} · ${formatPrice(p.price)}
+          <br>
+          <span style="color: ${p.stock <= 2 ? 'var(--color-danger)' : 'var(--color-text-dim)'}; font-weight: 500;">
+            Stock : ${p.stock || 0}
+          </span>
+        </div>
       </div>
       <div class="admin-product-actions">
         <button class="btn btn-secondary btn-sm" onclick="editAdminProduct('${p.id}')">✏️</button>
@@ -55,6 +61,12 @@ function renderAdmin() {
                 <label>Prix (FCFA)</label>
                 <input class="form-input" type="number" id="admin-price" placeholder="Ex: 15000" min="0"
                        value="${editProduct ? editProduct.price : ''}" required>
+              </div>
+
+              <div class="form-group">
+                <label>Stock disponible</label>
+                <input class="form-input" type="number" id="admin-stock" placeholder="Ex: 10" min="0"
+                       value="${editProduct ? (editProduct.stock !== undefined ? editProduct.stock : 10) : 10}" required>
               </div>
 
               <div class="form-group">
@@ -122,18 +134,19 @@ function saveAdminProduct() {
   const name = document.getElementById('admin-name').value.trim();
   const description = document.getElementById('admin-desc').value.trim();
   const price = parseInt(document.getElementById('admin-price').value) || 0;
+  const stock = parseInt(document.getElementById('admin-stock').value) || 0;
   const category = document.getElementById('admin-category').value;
   const imageUrl = document.getElementById('admin-image-url').value.trim();
   const featured = document.getElementById('admin-featured').checked;
 
   const image = adminImageBase64 || imageUrl;
 
-  if (!name || !description || !price || !category || !image) {
-    showToast('Veuillez remplir tous les champs obligatoires (y compris l\'image)');
+  if (!name || !description || price === undefined || stock === undefined || !category || !image) {
+    showToast('Veuillez remplir tous les champs obligatoires');
     return;
   }
 
-  const productData = { name, description, price, category, image, featured };
+  const productData = { name, description, price, stock, category, image, featured };
 
   if (adminEditId) {
     Store.updateProduct(adminEditId, productData).then(() => {
