@@ -4,31 +4,51 @@
 
 const Store = (() => {
     const PRODUCTS_PATH = 'products';
+    const SETTINGS_PATH = 'settings';
     const CART_KEY = 'axou_boutique_cart';
 
     let _products = [];
+    let _settings = {};
     let _cart = _loadCart();
     let _listeners = [];
     let _isLoaded = false;
 
     // --- Firebase Sync ---
     function _initFirebaseSync() {
+        // Products Sync
         const productsRef = window.fbRef(window.fbDB, PRODUCTS_PATH);
         window.fbOnValue(productsRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // Convert object to array if needed (Firebase stores lists as objects with keys)
                 _products = Object.keys(data).map(key => ({
                     ...data[key],
-                    id: key // Use Firebase key as ID
+                    id: key
                 }));
             } else {
-                // Initial seeding if database is empty
                 seedDatabase();
             }
-            _isLoaded = true;
-            _notify();
+            _checkLoaded();
         });
+
+        // Settings Sync (Admin Password, etc.)
+        const settingsRef = window.fbRef(window.fbDB, SETTINGS_PATH);
+        window.fbOnValue(settingsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                _settings = data;
+            } else {
+                // Initialize default password if not exists
+                window.fbSet(settingsRef, { adminPassword: 'admin' });
+            }
+            _checkLoaded();
+        });
+    }
+
+    function _checkLoaded() {
+        // Simple check to consider loaded once we have products (even empty list)
+        // and settings are initialized
+        _isLoaded = true;
+        _notify();
     }
 
     async function seedDatabase() {
@@ -76,6 +96,16 @@ const Store = (() => {
         isLoaded() { return _isLoaded; },
 
         seedDatabase,
+
+        // --- Settings ---
+        getAdminPassword() {
+            return _settings.adminPassword || 'admin';
+        },
+
+        async updateAdminPassword(newPassword) {
+            const settingsRef = window.fbRef(window.fbDB, SETTINGS_PATH);
+            await window.fbUpdate(settingsRef, { adminPassword: newPassword });
+        },
 
         // --- Products ---
         getProducts() { return [..._products]; },

@@ -5,7 +5,7 @@
 let adminEditId = null;
 let adminImageBase64 = null;
 let isAdminAuthenticated = false;
-const ADMIN_PASSWORD = 'admin'; // Default password
+// ADMIN_PASSWORD is now handled by Store (Firebase)
 
 function renderAdmin() {
   if (!isAdminAuthenticated) {
@@ -123,6 +123,21 @@ function renderAdmin() {
               </button>
             </div>
             ${productListHTML.length > 0 ? productListHTML : '<p style="color: var(--color-text-dim);">Aucun produit</p>'}
+
+            <div class="admin-settings-card" style="margin-top: var(--space-4xl); padding-top: var(--space-2xl); border-top: 1px solid var(--color-border);">
+              <h2>⚙️ Paramètres de sécurité</h2>
+              <div class="glass-card" style="padding: var(--space-xl); background: rgba(255,255,255,0.02);">
+                <form onsubmit="event.preventDefault(); updateAdminPassword();">
+                  <div class="form-group">
+                    <label>Nouveau mot de passe admin</label>
+                    <input class="form-input" type="password" id="new-admin-pass" placeholder="Entrez le nouveau mot de passe" required>
+                  </div>
+                  <button class="btn btn-secondary" type="submit" style="margin-top: var(--space-md);">
+                    Mettre à jour le mot de passe
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -196,6 +211,21 @@ function seedDefaultProducts() {
   }
 }
 
+function updateAdminPassword() {
+  const newPass = document.getElementById('new-admin-pass').value.trim();
+  if (newPass.length < 4) {
+    showToast('Le mot de passe doit faire au moins 4 caractères', 'error');
+    return;
+  }
+
+  if (confirm('Êtes-vous sûr de vouloir changer le mot de passe admin ?')) {
+    Store.updateAdminPassword(newPass).then(() => {
+      showToast('Mot de passe mis à jour avec succès !');
+      document.getElementById('new-admin-pass').value = '';
+    });
+  }
+}
+
 function cancelEdit() {
   adminEditId = null;
   adminImageBase64 = null;
@@ -240,7 +270,9 @@ function renderAdminLogin() {
 
 function adminLogin() {
   const pass = document.getElementById('admin-pass-input').value;
-  if (pass === ADMIN_PASSWORD) {
+  const currentAdminPass = Store.getAdminPassword();
+
+  if (pass === currentAdminPass) {
     isAdminAuthenticated = true;
     App.refresh();
   } else {
