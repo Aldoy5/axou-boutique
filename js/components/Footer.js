@@ -40,7 +40,7 @@ function renderFooter() {
           </div>
         </div>
         <div class="footer-bottom">
-          &copy; ${new Date().getFullYear()} AXOU BOUTIQUE — Tous droits réservés
+          &copy; ${new Date().getFullYear()} AXOU BOUTIQUE <span style="cursor: pointer; opacity: 0.5;" onclick="Router.navigate('/admin')">—</span> Tous droits réservés
         </div>
       </div>
     </footer>

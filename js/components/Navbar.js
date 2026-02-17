@@ -15,7 +15,7 @@ function renderNavbar() {
   return `
     <nav class="navbar" id="main-navbar">
       <div class="container">
-        <div class="nav-logo" onclick="Router.navigate('/')">AXOU BOUTIQUE</div>
+        <div class="nav-logo" onclick="handleLogoClick()">AXOU BOUTIQUE</div>
         <div class="nav-links" id="nav-links">
           <a class="nav-link ${isActive('/')}" onclick="Router.navigate('/')">Accueil</a>
           <a class="nav-link ${isActive('/catalog')}" onclick="Router.navigate('/catalog')">Catalogue</a>
@@ -32,6 +32,24 @@ function renderNavbar() {
       <div class="nav-overlay" id="nav-overlay" onclick="toggleMobileMenu()"></div>
     </nav>
   `;
+}
+
+let logoClickCount = 0;
+let logoClickTimeout = null;
+
+function handleLogoClick() {
+  logoClickCount++;
+  clearTimeout(logoClickTimeout);
+
+  if (logoClickCount === 3) {
+    logoClickCount = 0;
+    Router.navigate('/admin');
+  } else {
+    logoClickTimeout = setTimeout(() => {
+      if (logoClickCount === 1) Router.navigate('/');
+      logoClickCount = 0;
+    }, 300);
+  }
 }
 
 function toggleMobileMenu() {
