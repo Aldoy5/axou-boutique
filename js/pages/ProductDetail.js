@@ -4,6 +4,26 @@
 
 let detailQuantity = 1;
 
+function getSocialMetrics(productId) {
+  // Simple stable hash based on productId
+  let hash = 0;
+  for (let i = 0; i < productId.length; i++) {
+    hash = ((hash << 5) - hash) + productId.charCodeAt(i);
+    hash |= 0;
+  }
+  hash = Math.abs(hash);
+
+  const now = new Date();
+  const hour = now.getHours();
+  const day = now.getDate();
+
+  // Stable but varying numbers
+  const views = (hash % 150) + (hour * 12) + 40;
+  const sales = (hash % 25) + (day % 10) + 12;
+
+  return { views, sales };
+}
+
 function renderProductDetail(params) {
   const product = Store.getProduct(params.id);
 
@@ -53,6 +73,18 @@ function renderProductDetail(params) {
             <div class="product-detail-category">${getCategoryLabel(product.category)}</div>
             <h1>${product.name}</h1>
             <div class="product-detail-price">${formatPrice(product.price)}</div>
+            
+            <div class="product-social-metrics">
+              <div class="metric">
+                <span class="metric-icon">👁️</span>
+                <span class="metric-text"><strong>${getSocialMetrics(product.id).views}</strong> personnes consultent ce produit</span>
+              </div>
+              <div class="metric">
+                <span class="metric-icon">🛍️</span>
+                <span class="metric-text"><strong>${getSocialMetrics(product.id).sales}</strong> achats réalisés ces derniers jours</span>
+              </div>
+            </div>
+
             <p class="product-detail-description">${product.description}</p>
             
             <div class="product-detail-quantity">
