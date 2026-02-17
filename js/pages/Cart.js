@@ -40,7 +40,9 @@ function renderCart() {
             <div class="quantity-control">
               <button class="quantity-btn" onclick="updateCartQty('${item.id}', ${item.quantity - 1})">−</button>
               <div class="quantity-value">${item.quantity}</div>
-              <button class="quantity-btn" onclick="updateCartQty('${item.id}', ${item.quantity + 1})">+</button>
+              <button class="quantity-btn" 
+                      onclick="updateCartQty('${item.id}', ${item.quantity + 1})"
+                      ${item.quantity >= product.stock ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''}>+</button>
             </div>
           </div>
         </div>

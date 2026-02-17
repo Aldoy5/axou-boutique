@@ -96,9 +96,9 @@ function renderProductDetail(params) {
             <div class="product-detail-quantity">
               <span style="color: var(--color-text-muted); font-size: 0.9rem;">Quantité :</span>
               <div class="quantity-control">
-                <button class="quantity-btn" onclick="changeDetailQty(-1)">−</button>
+                <button class="quantity-btn" onclick="changeDetailQty(-1, ${product.stock})">−</button>
                 <div class="quantity-value" id="detail-qty">${detailQuantity}</div>
-                <button class="quantity-btn" onclick="changeDetailQty(1)">+</button>
+                <button class="quantity-btn" onclick="changeDetailQty(1, ${product.stock})">+</button>
               </div>
             </div>
 
@@ -113,9 +113,14 @@ function renderProductDetail(params) {
   `;
 }
 
-function changeDetailQty(delta) {
-  detailQuantity = Math.max(1, detailQuantity + delta);
-  App.refresh();
+function changeDetailQty(delta, maxStock) {
+  const newQty = detailQuantity + delta;
+  if (newQty >= 1 && newQty <= maxStock) {
+    detailQuantity = newQty;
+    App.refresh();
+  } else if (newQty > maxStock) {
+    showToast(`Désolé, seulement ${maxStock} en stock`, 'error');
+  }
 }
 
 function addDetailToCart(productId) {

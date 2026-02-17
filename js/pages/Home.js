@@ -74,15 +74,17 @@ function renderProductCard(product) {
         <img class="product-card-image" src="${product.image}" alt="${product.name}" 
              onerror="this.parentElement.innerHTML='<div class=\\'img-placeholder\\'>${getCategoryIcon(product.category)}</div>'">
         ${product.featured ? '<span class="product-card-badge">Vedette</span>' : ''}
+        ${product.stock <= 0 ? '<span class="product-card-badge" style="background: var(--color-danger); right: auto; left: var(--space-sm);">Rupture</span>' : ''}
       </div>
       <div class="product-card-body">
         <div class="product-card-category">${getCategoryLabel(product.category)}</div>
         <h3 class="product-card-name">${product.name}</h3>
         <div class="product-card-actions">
           <span class="product-card-price">${formatPrice(product.price)}</span>
-          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); addToCartQuick('${product.id}')">
-            🛒 Ajouter
-          </button>
+          ${product.stock > 0
+      ? `<button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); addToCartQuick('${product.id}')">🛒 Ajouter</button>`
+      : `<button class="btn btn-secondary btn-sm" disabled style="opacity: 0.5; padding: 0.5rem 0.75rem;">Épuisé</button>`
+    }
         </div>
       </div>
     </div>

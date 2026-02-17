@@ -193,16 +193,45 @@ const Store = (() => {
         },
 
         addToCart(productId, quantity = 1) {
+            const product = _products.find(p => p.id === productId);
+            if (!product) return;
+
+            if (product.stock <= 0) {
+                showToast("Ce produit est en rupture de stock", "error");
+                return;
+            }
+
             const existing = _cart.find(item => item.id === productId);
-            if (existing) {
-                existing.quantity += quantity;
+            const currentQty = existing ? existing.quantity : 0;
+
+            if (currentQty + quantity > product.stock) {
+                showToast(`Stock limité : seulement ${product.stock} disponible(s)`, "error");
+                // On ajuste au maximum possible
+                if (existing) {
+                    existing.quantity = product.stock;
+                } else {
+                    _cart.push({ id: productId, quantity: product.stock });
+                }
             } else {
-                _cart.push({ id: productId, quantity });
+                if (existing) {
+                    existing.quantity += quantity;
+                } else {
+                    _cart.push({ id: productId, quantity });
+                }
             }
             _saveCart();
+            _notifySubscribers();
         },
 
         updateCartQuantity(productId, quantity) {
+            const product = _products.find(p => p.id === productId);
+            if (!product) return;
+
+            if (quantity > product.stock) {
+                showToast(`Stock limité : seulement ${product.stock} disponible(s)`, "error");
+                quantity = product.stock;
+            }
+
             if (quantity <= 0) {
                 _cart = _cart.filter(item => item.id !== productId);
             } else {
@@ -210,6 +239,7 @@ const Store = (() => {
                 if (existing) existing.quantity = quantity;
             }
             _saveCart();
+            _notifySubscribers();
         },
 
         removeFromCart(productId) {
