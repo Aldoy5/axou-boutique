@@ -38,18 +38,8 @@ const Store = (() => {
             _checkLoaded();
         });
 
-        // Settings Sync (Admin Password, etc.)
-        const settingsRef = window.fbRef(window.fbDB, SETTINGS_PATH);
-        window.fbOnValue(settingsRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                _settings = data;
-            } else {
-                // Initialize default password if not exists
-                window.fbSet(settingsRef, { adminPassword: 'admin' });
-            }
-            _checkLoaded();
-        });
+        // Settings Sync (Supprimé car géré par Firebase Auth)
+        _checkLoaded();
     }
 
     function _checkLoaded() {
@@ -105,16 +95,6 @@ const Store = (() => {
 
         seedDatabase,
 
-        // --- Settings ---
-        getAdminPassword() {
-            return _settings.adminPassword || 'admin';
-        },
-
-        async updateAdminPassword(newPassword) {
-            const settingsRef = window.fbRef(window.fbDB, SETTINGS_PATH);
-            await window.fbUpdate(settingsRef, { adminPassword: newPassword });
-        },
-
         // --- Auth ---
         isAdminLoggedIn() {
             return !!_user;
@@ -126,6 +106,11 @@ const Store = (() => {
 
         async logout() {
             return await window.fbSignOut(window.fbAuth);
+        },
+
+        async updateMyPassword(newPassword) {
+            if (!_user) throw new Error("Non connecté");
+            return await window.fbUpdatePassword(_user, newPassword);
         },
 
         // --- Products ---

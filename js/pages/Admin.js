@@ -213,16 +213,26 @@ function seedDefaultProducts() {
 
 function updateAdminPassword() {
   const newPass = document.getElementById('new-admin-pass').value.trim();
-  if (newPass.length < 4) {
-    showToast('Le mot de passe doit faire au moins 4 caractères', 'error');
+  if (newPass.length < 6) {
+    showToast('Le mot de passe doit faire au moins 6 caractères', 'error');
     return;
   }
 
-  if (confirm('Êtes-vous sûr de vouloir changer le mot de passe admin ?')) {
-    Store.updateAdminPassword(newPass).then(() => {
-      showToast('Mot de passe mis à jour avec succès !');
-      document.getElementById('new-admin-pass').value = '';
-    });
+  if (confirm('Êtes-vous sûr de vouloir changer VOTRE mot de passe de connexion ?')) {
+    showToast('Mise à jour...', 'success');
+    Store.updateMyPassword(newPass)
+      .then(() => {
+        showToast('Mot de passe mis à jour avec succès !');
+        document.getElementById('new-admin-pass').value = '';
+      })
+      .catch(err => {
+        console.error(err);
+        if (err.code === 'auth/requires-recent-login') {
+          showToast('Sécurité : Veuillez vous déconnecter et vous reconnecter pour changer de mot de passe', 'error');
+        } else {
+          showToast('Erreur : ' + err.message, 'error');
+        }
+      });
   }
 }
 
