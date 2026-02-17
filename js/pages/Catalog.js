@@ -8,33 +8,34 @@ let catalogState = {
   sort: 'default',
 };
 
-// If category is passed via route, sync it with state
-if (params && params.category) {
-  catalogState.category = params.category;
-}
+function renderCatalog(params) {
+  // Synchronise la catégorie depuis l'URL si présente
+  if (params && params.category) {
+    catalogState.category = params.category;
+  }
 
-const products = Store.searchProducts(catalogState.search, catalogState.category, catalogState.sort);
+  const products = Store.searchProducts(catalogState.search, catalogState.category, catalogState.sort);
 
-const filterButtons = [
-  { id: 'all', label: 'Tous' },
-  ...CATEGORIES.map(c => ({ id: c.id, label: c.name }))
-];
+  const filterButtons = [
+    { id: 'all', label: 'Tous' },
+    ...CATEGORIES.map(c => ({ id: c.id, label: c.name }))
+  ];
 
-const filtersHTML = filterButtons.map(f => `
+  const filtersHTML = filterButtons.map(f => `
     <button class="filter-btn ${catalogState.category === f.id ? 'active' : ''}"
             onclick="setCatalogFilter('${f.id}')">
       ${f.label}
     </button>
   `).join('');
 
-const productsHTML = products.length > 0
-  ? products.map(p => renderProductCard(p)).join('')
-  : `<div class="no-results">
+  const productsHTML = products.length > 0
+    ? products.map(p => renderProductCard(p)).join('')
+    : `<div class="no-results">
         <div class="no-results-icon">🔍</div>
         <p>Aucun produit trouvé</p>
       </div>`;
 
-return `
+  return `
     <div class="catalog-page">
       <div class="container">
         <h1>Notre Catalogue</h1>
@@ -69,7 +70,7 @@ return `
 }
 
 function setCatalogFilter(category) {
-  // Use router to change category via URL
+  // Utilise le routeur pour changer de catégorie via l'URL
   Router.navigate('/catalog/' + category);
 }
 
