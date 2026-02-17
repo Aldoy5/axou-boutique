@@ -18,6 +18,37 @@
 <body>
     <div id="app"></div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBe5r6Irj3vTFv0X7gj08JBvaOQXvJ9LNg",
+          authDomain: "axou-boutique.firebaseapp.com",
+          databaseURL: "https://axou-boutique-default-rtdb.firebaseio.com",
+          projectId: "axou-boutique",
+          storageBucket: "axou-boutique.firebasestorage.app",
+          messagingSenderId: "493330095587",
+          appId: "1:493330095587:web:4086634fe10e42061ed4d6",
+          measurementId: "G-CEK5K9R4X6"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Make Firebase functions available globally for our legacy scripts
+        window.fbDB = db;
+        window.fbRef = ref;
+        window.fbOnValue = onValue;
+        window.fbSet = set;
+        window.fbPush = push;
+        window.fbUpdate = update;
+        window.fbRemove = remove;
+        
+        console.log("Firebase initialized");
+    </script>
+
     <script src="js/data.js"></script>
     <script src="js/store.js"></script>
     <script src="js/router.js"></script>

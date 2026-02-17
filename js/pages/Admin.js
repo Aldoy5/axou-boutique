@@ -104,7 +104,12 @@ function renderAdmin() {
           </div>
 
           <div class="admin-products-list">
-            <h2>Produits existants (${products.length})</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
+              <h2>Produits existants (${products.length})</h2>
+              <button class="btn btn-secondary btn-sm" onclick="seedDefaultProducts()">
+                📥 Importer défauts
+              </button>
+            </div>
             ${productListHTML.length > 0 ? productListHTML : '<p style="color: var(--color-text-dim);">Aucun produit</p>'}
           </div>
         </div>
@@ -131,16 +136,19 @@ function saveAdminProduct() {
   const productData = { name, description, price, category, image, featured };
 
   if (adminEditId) {
-    Store.updateProduct(adminEditId, productData);
-    showToast('Produit mis à jour avec succès !');
-    adminEditId = null;
+    Store.updateProduct(adminEditId, productData).then(() => {
+      showToast('Produit mis à jour avec succès !');
+      adminEditId = null;
+      adminImageBase64 = null;
+      App.refresh();
+    });
   } else {
-    Store.addProduct(productData);
-    showToast('Produit ajouté avec succès !');
+    Store.addProduct(productData).then(() => {
+      showToast('Produit ajouté avec succès !');
+      adminImageBase64 = null;
+      App.refresh();
+    });
   }
-
-  adminImageBase64 = null;
-  App.refresh();
 }
 
 function editAdminProduct(id) {
@@ -155,10 +163,23 @@ function editAdminProduct(id) {
 
 function deleteAdminProduct(id) {
   if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-    Store.deleteProduct(id);
-    if (adminEditId === id) adminEditId = null;
-    showToast('Produit supprimé');
-    App.refresh();
+    Store.deleteProduct(id).then(() => {
+      if (adminEditId === id) adminEditId = null;
+      showToast('Produit supprimé');
+      App.refresh();
+    });
+  }
+}
+
+function seedDefaultProducts() {
+  if (confirm('Voulez-vous importer les produits par défaut ? Cela ajoutera des copies des produits initiaux.')) {
+    showToast('Importation en cours...');
+    Store.seedDatabase().then(() => {
+      showToast('Produits par défaut importés !');
+    }).catch(err => {
+      console.error(err);
+      showToast('Erreur lors de l\'importation', 'error');
+    });
   }
 }
 

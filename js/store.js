@@ -3,26 +3,51 @@
    ============================================ */
 
 const Store = (() => {
-    const PRODUCTS_KEY = 'axou_boutique_products';
+    const PRODUCTS_PATH = 'products';
     const CART_KEY = 'axou_boutique_cart';
 
-    // Initialize products from localStorage or demo data
-    function _initProducts() {
-        const stored = localStorage.getItem(PRODUCTS_KEY);
-        if (stored) {
-            try { return JSON.parse(stored); } catch (e) { /* fall through */ }
-        }
-        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(DEMO_PRODUCTS));
-        return [...DEMO_PRODUCTS];
-    }
-
-    let _products = _initProducts();
+    let _products = [];
     let _cart = _loadCart();
     let _listeners = [];
+    let _isLoaded = false;
 
-    function _saveProducts() {
-        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(_products));
-        _notify();
+    // --- Firebase Sync ---
+    function _initFirebaseSync() {
+        const productsRef = window.fbRef(window.fbDB, PRODUCTS_PATH);
+        window.fbOnValue(productsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // Convert object to array if needed (Firebase stores lists as objects with keys)
+                _products = Object.keys(data).map(key => ({
+                    ...data[key],
+                    id: key // Use Firebase key as ID
+                }));
+            } else {
+                // Initial seeding if database is empty
+                seedDatabase();
+            }
+            _isLoaded = true;
+            _notify();
+        });
+    }
+
+    async function seedDatabase() {
+        console.log("Seeding database with demo products...");
+        const promises = DEMO_PRODUCTS.map(p => {
+            const { id, ...data } = p;
+            const productsRef = window.fbRef(window.fbDB, PRODUCTS_PATH);
+            return window.fbPush(productsRef, data);
+        });
+        await Promise.all(promises);
+    }
+
+    // Initialize sync
+    if (window.fbDB) {
+        _initFirebaseSync();
+    } else {
+        // Fallback for local dev without firebase initialized yet
+        console.warn("Firebase not ready, waiting...");
+        window.addEventListener('load', _initFirebaseSync);
     }
 
     function _loadCart() {
@@ -48,6 +73,10 @@ const Store = (() => {
             return () => { _listeners = _listeners.filter(l => l !== fn); };
         },
 
+        isLoaded() { return _isLoaded; },
+
+        seedDatabase,
+
         // --- Products ---
         getProducts() { return [..._products]; },
 
@@ -60,31 +89,28 @@ const Store = (() => {
             return _products.filter(p => p.category === cat);
         },
 
-        addProduct(product) {
-            const newProduct = {
+        async addProduct(product) {
+            const productsRef = window.fbRef(window.fbDB, PRODUCTS_PATH);
+            const newProductRef = window.fbPush(productsRef);
+            await window.fbSet(newProductRef, {
                 ...product,
-                id: 'product-' + Date.now(),
-                featured: product.featured || false,
-            };
-            _products.push(newProduct);
-            _saveProducts();
-            return newProduct;
+                featured: product.featured || false
+            });
+            return newProductRef.key;
         },
 
-        updateProduct(id, updates) {
-            const idx = _products.findIndex(p => p.id === id);
-            if (idx !== -1) {
-                _products[idx] = { ..._products[idx], ...updates };
-                _saveProducts();
-            }
+        async updateProduct(id, updates) {
+            const productRef = window.fbRef(window.fbDB, `${PRODUCTS_PATH}/${id}`);
+            await window.fbUpdate(productRef, updates);
         },
 
-        deleteProduct(id) {
-            _products = _products.filter(p => p.id !== id);
-            // Also remove from cart
+        async deleteProduct(id) {
+            const productRef = window.fbRef(window.fbDB, `${PRODUCTS_PATH}/${id}`);
+            await window.fbRemove(productRef);
+
+            // Also remove from cart locally
             _cart = _cart.filter(item => item.id !== id);
             _saveCart();
-            _saveProducts();
         },
 
         // --- Cart ---

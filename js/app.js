@@ -81,6 +81,12 @@ const App = (() => {
     function init() {
         initNavbarScroll();
         Router.init();
+
+        // Subscribe to store changes (Firebase sync)
+        Store.subscribe(() => {
+            console.log("Store updated, refreshing app...");
+            refresh();
+        });
     }
 
     // Start app when DOM is ready
