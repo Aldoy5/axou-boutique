@@ -194,33 +194,39 @@ const Store = (() => {
 
         addToCart(productId, quantity = 1) {
             const product = _products.find(p => p.id === productId);
-            if (!product) return;
+            if (!product) return false;
 
-            if (product.stock <= 0) {
+            const stock = parseInt(product.stock) || 0;
+
+            if (stock <= 0) {
                 showToast("Ce produit est en rupture de stock", "error");
-                return;
+                return false;
             }
 
             const existing = _cart.find(item => item.id === productId);
             const currentQty = existing ? existing.quantity : 0;
 
-            if (currentQty + quantity > product.stock) {
-                showToast(`Stock limité : seulement ${product.stock} disponible(s)`, "error");
+            if (currentQty + quantity > stock) {
+                showToast(`Stock limité : seulement ${stock} disponible(s)`, "error");
                 // On ajuste au maximum possible
                 if (existing) {
-                    existing.quantity = product.stock;
+                    existing.quantity = stock;
                 } else {
-                    _cart.push({ id: productId, quantity: product.stock });
+                    _cart.push({ id: productId, quantity: stock });
                 }
+                _saveCart();
+                _notifySubscribers();
+                return false;
             } else {
                 if (existing) {
                     existing.quantity += quantity;
                 } else {
                     _cart.push({ id: productId, quantity });
                 }
+                _saveCart();
+                _notifySubscribers();
+                return true;
             }
-            _saveCart();
-            _notifySubscribers();
         },
 
         updateCartQuantity(productId, quantity) {
