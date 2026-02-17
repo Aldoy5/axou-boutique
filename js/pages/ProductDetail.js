@@ -124,8 +124,10 @@ function changeDetailQty(delta, maxStock) {
 }
 
 function addDetailToCart(productId) {
-  Store.addToCart(productId, detailQuantity);
-  showToast(`${detailQuantity} article(s) ajouté(s) au panier !`, 'success', true);
-  detailQuantity = 1;
-  App.refresh();
+  const success = Store.addToCart(productId, detailQuantity);
+  if (success) {
+    showToast(`${detailQuantity} article(s) ajouté(s) au panier !`, 'success', true);
+    detailQuantity = 1;
+    App.refresh();
+  }
 }
