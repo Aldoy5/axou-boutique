@@ -154,28 +154,44 @@ function saveAdminProduct() {
   const imageUrl = document.getElementById('admin-image-url').value.trim();
   const featured = document.getElementById('admin-featured').checked;
 
-  const image = adminImageBase64 || imageUrl;
+  const fileInput = document.getElementById('admin-file-input');
+  const file = fileInput.files[0];
 
-  if (!name || !description || price === undefined || stock === undefined || !category || !image) {
+  if (!name || !description || price === undefined || stock === undefined || !category || (!file && !imageUrl && !editProduct?.image)) {
     showToast('Veuillez remplir tous les champs obligatoires');
     return;
   }
 
-  const productData = { name, description, price, stock, category, image, featured };
+  showToast('Enregistrement en cours...', 'success');
 
-  if (adminEditId) {
-    Store.updateProduct(adminEditId, productData).then(() => {
+  const performSave = async (finalImageUrl) => {
+    const productData = { name, description, price, stock, category, image: finalImageUrl, featured };
+
+    if (adminEditId) {
+      await Store.updateProduct(adminEditId, productData);
       showToast('Produit mis à jour avec succès !');
-      adminEditId = null;
-      adminImageBase64 = null;
-      App.refresh();
-    });
-  } else {
-    Store.addProduct(productData).then(() => {
+    } else {
+      await Store.addProduct(productData);
       showToast('Produit ajouté avec succès !');
-      adminImageBase64 = null;
-      App.refresh();
-    });
+    }
+
+    adminEditId = null;
+    adminImageBase64 = null;
+    fileInput.value = '';
+    App.refresh();
+  };
+
+  if (file) {
+    // Priority: Upload new file to Cloudinary
+    Store.uploadImageToCloudinary(file)
+      .then(url => performSave(url))
+      .catch(err => {
+        showToast("Erreur Cloudinary: " + err.message, 'error');
+      });
+  } else {
+    // Use existing URL or previous image
+    const finalUrl = imageUrl || (editProduct ? editProduct.image : '');
+    performSave(finalUrl).catch(err => showToast(err.message, 'error'));
   }
 }
 

@@ -113,6 +113,35 @@ const Store = (() => {
             return await window.fbUpdatePassword(_user, newPassword);
         },
 
+        // --- Cloudinary ---
+        async uploadImageToCloudinary(file, uploadPreset = 'axou_preset') {
+            const cloudName = 'dhrzst5ge';
+            const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', uploadPreset);
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error?.message || "Erreur lors de l'upload vers Cloudinary");
+                }
+
+                const data = await response.json();
+                // Return optimized URL (auto format, auto quality)
+                return data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+            } catch (err) {
+                console.error("Cloudinary Upload Error:", err);
+                throw err;
+            }
+        },
+
         // --- Products ---
         getProducts() { return [..._products]; },
 
