@@ -17,6 +17,9 @@ function renderNavbar() {
       <div class="container">
         <div class="nav-logo" onclick="handleLogoClick()">AXOU BOUTIQUE</div>
         <div class="nav-links" id="nav-links">
+          <div class="theme-toggle" onclick="App.toggleTheme()" style="cursor: pointer; font-size: 1.2rem; margin-right: var(--space-md);">
+            ${document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'}
+          </div>
           <a class="nav-link ${isActive('/')}" onclick="Router.navigate('/')">Accueil</a>
           <a class="nav-link ${isActive('/catalog')}" onclick="Router.navigate('/catalog')">Catalogue</a>
           <a class="nav-link ${isActive('/cart')}" onclick="Router.navigate('/cart')">Panier</a>

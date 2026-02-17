@@ -79,6 +79,7 @@ const App = (() => {
 
     // --- Init ---
     function init() {
+        initTheme();
         initNavbarScroll();
         Router.init();
 
@@ -89,6 +90,19 @@ const App = (() => {
         });
     }
 
+    function initTheme() {
+        const savedTheme = localStorage.getItem('axou-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('axou-theme', newTheme);
+        refresh();
+    }
+
     // Start app when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
@@ -96,7 +110,7 @@ const App = (() => {
         init();
     }
 
-    return { refresh, showPage };
+    return { refresh, showPage, toggleTheme };
 })();
 
 // --- Toast Helper ---

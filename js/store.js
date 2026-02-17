@@ -222,11 +222,17 @@ const Store = (() => {
             _saveCart();
         },
 
+        isLoaded() { return _isLoaded; },
+
         // --- Search & Filter ---
-        searchProducts(query, category, sortBy) {
+        searchProducts(query, category, sortBy, minPrice = 0, maxPrice = Infinity) {
             let results = category && category !== 'all'
                 ? _products.filter(p => p.category === category)
                 : [..._products];
+
+            if (minPrice > 0 || maxPrice < Infinity) {
+                results = results.filter(p => p.price >= minPrice && p.price <= maxPrice);
+            }
 
             if (query) {
                 const q = query.toLowerCase();
