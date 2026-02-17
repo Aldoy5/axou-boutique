@@ -21,32 +21,38 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyBe5r6Irj3vTFv0X7gj08JBvaOQXvJ9LNg",
-          authDomain: "axou-boutique.firebaseapp.com",
-          databaseURL: "https://axou-boutique-default-rtdb.firebaseio.com",
-          projectId: "axou-boutique",
-          storageBucket: "axou-boutique.firebasestorage.app",
-          messagingSenderId: "493330095587",
-          appId: "1:493330095587:web:4086634fe10e42061ed4d6",
-          measurementId: "G-CEK5K9R4X6"
+            apiKey: "AIzaSyBe5r6Irj3vTFv0X7gj08JBvaOQXvJ9LNg",
+            authDomain: "axou-boutique.firebaseapp.com",
+            databaseURL: "https://axou-boutique-default-rtdb.firebaseio.com",
+            projectId: "axou-boutique",
+            storageBucket: "axou-boutique.firebasestorage.app",
+            messagingSenderId: "493330095587",
+            appId: "1:493330095587:web:4086634fe10e42061ed4d6",
+            measurementId: "G-CEK5K9R4X6"
         };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const auth = getAuth(app);
 
         // Make Firebase functions available globally for our legacy scripts
         window.fbDB = db;
+        window.fbAuth = auth;
         window.fbRef = ref;
         window.fbOnValue = onValue;
         window.fbSet = set;
         window.fbPush = push;
         window.fbUpdate = update;
         window.fbRemove = remove;
-        
-        console.log("Firebase initialized");
+        window.fbSignIn = signInWithEmailAndPassword;
+        window.fbOnAuthStateChanged = onAuthStateChanged;
+        window.fbSignOut = signOut;
+
+        console.log("Firebase initialized with Auth");
     </script>
 
     <script src="js/data.js"></script>

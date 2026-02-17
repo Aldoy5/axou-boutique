@@ -9,12 +9,20 @@ const Store = (() => {
 
     let _products = [];
     let _settings = {};
+    let _user = null;
     let _cart = _loadCart();
     let _listeners = [];
     let _isLoaded = false;
 
     // --- Firebase Sync ---
     function _initFirebaseSync() {
+        // Auth Sync
+        window.fbOnAuthStateChanged(window.fbAuth, (user) => {
+            _user = user;
+            console.log("Auth state changed:", _user ? "Logged in" : "Logged out");
+            _notify();
+        });
+
         // Products Sync
         const productsRef = window.fbRef(window.fbDB, PRODUCTS_PATH);
         window.fbOnValue(productsRef, (snapshot) => {
@@ -105,6 +113,19 @@ const Store = (() => {
         async updateAdminPassword(newPassword) {
             const settingsRef = window.fbRef(window.fbDB, SETTINGS_PATH);
             await window.fbUpdate(settingsRef, { adminPassword: newPassword });
+        },
+
+        // --- Auth ---
+        isAdminLoggedIn() {
+            return !!_user;
+        },
+
+        async login(email, password) {
+            return await window.fbSignIn(window.fbAuth, email, password);
+        },
+
+        async logout() {
+            return await window.fbSignOut(window.fbAuth);
         },
 
         // --- Products ---

@@ -4,11 +4,11 @@
 
 let adminEditId = null;
 let adminImageBase64 = null;
-let isAdminAuthenticated = false;
+// isAdminAuthenticated is now handled by Store.isAdminLoggedIn()
 // ADMIN_PASSWORD is now handled by Store (Firebase)
 
 function renderAdmin() {
-  if (!isAdminAuthenticated) {
+  if (!Store.isAdminLoggedIn()) {
     return renderAdminLogin();
   }
 
@@ -109,7 +109,7 @@ function renderAdmin() {
                   Annuler
                 </button>
               ` : ''}
-              <button class="btn btn-secondary" type="button" style="width: 100%; margin-top: var(--space-xl); border-color: var(--color-danger); color: var(--color-danger);" onclick="adminLogout()">
+              <button class="btn btn-secondary" type="button" style="width: 100%; margin-top: var(--space-xl); border-color: var(--color-danger); color: var(--color-danger);" onclick="Store.logout()">
                 Déconnexion
               </button>
             </form>
@@ -256,8 +256,12 @@ function renderAdminLogin() {
         <div class="glass-card" style="padding: var(--space-2xl);">
           <h2 style="font-family: var(--font-display); margin-bottom: var(--space-xl); text-align: center;">Accès Admin</h2>
           <div class="form-group">
+            <label>Email Admin</label>
+            <input class="form-input" type="email" id="admin-email-input" placeholder="alexachie14@gmail.com" value="alexachie14@gmail.com">
+          </div>
+          <div class="form-group">
             <label>Mot de passe</label>
-            <input class="form-input" type="password" id="admin-pass-input" placeholder="Entrez le mot de passe">
+            <input class="form-input" type="password" id="admin-pass-input" placeholder="Entrez votre mot de passe">
           </div>
           <button class="btn btn-primary" style="width: 100%; margin-top: var(--space-lg);" onclick="adminLogin()">
             Se connecter
@@ -269,18 +273,27 @@ function renderAdminLogin() {
 }
 
 function adminLogin() {
+  const email = document.getElementById('admin-email-input').value.trim();
   const pass = document.getElementById('admin-pass-input').value;
-  const currentAdminPass = Store.getAdminPassword();
 
-  if (pass === currentAdminPass) {
-    isAdminAuthenticated = true;
-    App.refresh();
-  } else {
-    showToast('Mot de passe incorrect', 'error');
+  if (!email || !pass) {
+    showToast('Veuillez remplir tous les champs', 'error');
+    return;
   }
+
+  showToast('Connexion en cours...', 'success');
+
+  Store.login(email, pass)
+    .then(() => {
+      showToast('Connexion réussie !');
+      // Redirection automatique via l'abonnement au Store dans app.js
+    })
+    .catch(err => {
+      console.error(err);
+      showToast('Erreur : ' + err.message, 'error');
+    });
 }
 
 function adminLogout() {
-  isAdminAuthenticated = false;
-  App.refresh();
+  Store.logout();
 }
