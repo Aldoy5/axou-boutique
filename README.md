@@ -56,7 +56,10 @@ axou-boutique/
    ```
 
 3. **Configuration Firebase** :
-   Les paramètres de configuration Firebase sont actuellement inclus dans le fichier `index.html`. Pour une utilisation en production, assurez-vous de sécuriser vos clés et de configurer correctement les règles de sécurité Firebase.
+   Le projet utilise un fichier de configuration externe pour sécuriser les clés API.
+   - Copiez le fichier `js/firebase-config.example.js` vers un nouveau fichier nommé `js/firebase-config.js`.
+   - Remplissez `js/firebase-config.js` avec vos propres identifiants Firebase.
+   - **Note** : Le fichier `js/firebase-config.js` est ignoré par Git pour éviter de publier vos clés secrètes.
 
 ## 💻 Développement
 

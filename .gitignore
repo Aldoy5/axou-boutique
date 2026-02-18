@@ -4,3 +4,4 @@ node_modules/
 .env
 *.log
 .gemini/
+js/firebase-config.js
