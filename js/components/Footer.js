@@ -25,9 +25,9 @@ function renderFooter() {
           <div>
             <div class="footer-title">Catégories</div>
             <div class="footer-links">
-              <a onclick="Router.navigate('/catalog/beaute')">Beauté</a>
-              <a onclick="Router.navigate('/catalog/chaines')">Chaînes & Bijoux</a>
-              <a onclick="Router.navigate('/catalog/pyjamas')">Pyjamas</a>
+              ${CATEGORIES.map(cat => `
+                <a onclick="Router.navigate('/catalog/${cat.id}')">${cat.name}</a>
+              `).join('')}
             </div>
           </div>
           <div>
