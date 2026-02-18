@@ -56,10 +56,9 @@ axou-boutique/
    ```
 
 3. **Configuration Firebase** :
-   Le projet utilise un fichier de configuration externe pour sécuriser les clés API.
-   - Copiez le fichier `js/firebase-config.example.js` vers un nouveau fichier nommé `js/firebase-config.js`.
-   - Remplissez `js/firebase-config.js` avec vos propres identifiants Firebase.
-   - **Note** : Le fichier `js/firebase-config.js` est ignoré par Git pour éviter de publier vos clés secrètes.
+   Le projet utilise un fichier `js/firebase-config.js`. 
+   - Pour les nouveaux développeurs : copiez `js/firebase-config.example.js` vers `js/firebase-config.js` si ce dernier est manquant.
+   - **Important** : Bien que ce fichier soit présent dans le dépôt pour faciliter le déploiement GitHub Pages, assurez-vous de restreindre votre clé API dans la console Google Cloud (voir section Sécurité).
 
 ## 💻 Développement
 
