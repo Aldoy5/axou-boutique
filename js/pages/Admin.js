@@ -116,7 +116,7 @@ function renderAdmin() {
           </div>
 
           <div class="admin-products-list">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
+            <div class="admin-list-header">
               <h2>Produits existants (${products.length})</h2>
               <button class="btn btn-secondary btn-sm" onclick="seedDefaultProducts()">
                 📥 Importer défauts
