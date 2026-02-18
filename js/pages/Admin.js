@@ -281,17 +281,19 @@ function renderAdminLogin() {
       <div class="container" style="max-width: 400px; padding-top: var(--space-4xl);">
         <div class="glass-card" style="padding: var(--space-2xl);">
           <h2 style="font-family: var(--font-display); margin-bottom: var(--space-xl); text-align: center;">Accès Admin</h2>
-          <div class="form-group">
-            <label>Email Admin</label>
-            <input class="form-input" type="email" id="admin-email-input" placeholder="Ex: admin@boutique.com">
-          </div>
-          <div class="form-group">
-            <label>Mot de passe</label>
-            <input class="form-input" type="password" id="admin-pass-input" placeholder="Entrez votre mot de passe">
-          </div>
-          <button class="btn btn-primary" style="width: 100%; margin-top: var(--space-lg);" onclick="adminLogin()">
-            Se connecter
-          </button>
+          <form onsubmit="event.preventDefault(); adminLogin();">
+            <div class="form-group">
+              <label>Email Admin</label>
+              <input class="form-input" type="email" id="admin-email-input" placeholder="Ex: admin@boutique.com" required>
+            </div>
+            <div class="form-group">
+              <label>Mot de passe</label>
+              <input class="form-input" type="password" id="admin-pass-input" placeholder="Entrez votre mot de passe" required>
+            </div>
+            <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: var(--space-lg);">
+              Se connecter
+            </button>
+          </form>
         </div>
       </div>
     </div>
