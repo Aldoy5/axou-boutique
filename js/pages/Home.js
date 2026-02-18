@@ -91,14 +91,14 @@ function renderProductCard(product) {
   `;
 }
 
-function getCategoryLabel(cat) {
-  const labels = { beaute: 'Beauté', chaines: 'Chaînes & Bijoux', pyjamas: 'Pyjamas' };
-  return labels[cat] || cat;
+function getCategoryLabel(catId) {
+  const cat = CATEGORIES.find(c => c.id === catId);
+  return cat ? cat.name : catId;
 }
 
-function getCategoryIcon(cat) {
-  const icons = { beaute: '✨', chaines: '💎', pyjamas: '🌙' };
-  return icons[cat] || '📦';
+function getCategoryIcon(catId) {
+  const cat = CATEGORIES.find(c => c.id === catId);
+  return cat ? cat.icon : '📦';
 }
 
 function addToCartQuick(productId) {

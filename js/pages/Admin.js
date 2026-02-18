@@ -73,9 +73,9 @@ function renderAdmin() {
                 <label>Catégorie</label>
                 <select class="form-select" id="admin-category" required>
                   <option value="">Sélectionner...</option>
-                  <option value="beaute" ${editProduct?.category === 'beaute' ? 'selected' : ''}>Beauté</option>
-                  <option value="chaines" ${editProduct?.category === 'chaines' ? 'selected' : ''}>Chaînes & Bijoux</option>
-                  <option value="pyjamas" ${editProduct?.category === 'pyjamas' ? 'selected' : ''}>Pyjamas</option>
+                  ${CATEGORIES.map(cat => `
+                    <option value="${cat.id}" ${editProduct?.category === cat.id ? 'selected' : ''}>${cat.name}</option>
+                  `).join('')}
                 </select>
               </div>
 

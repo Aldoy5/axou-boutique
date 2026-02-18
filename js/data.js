@@ -152,6 +152,13 @@ const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=800&h=500&fit=crop',
     icon: '🌙'
   },
+  {
+    id: 'special-kit',
+    name: 'Spécial Kit',
+    description: 'Ensembles exclusifs et coffrets cadeaux',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&h=500&fit=crop',
+    icon: '🎁'
+  },
 ];
 
 function formatPrice(price) {
