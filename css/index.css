@@ -1538,6 +1538,23 @@ ol {
     z-index: 1001;
   }
 
+  /* Cart outside menu */
+  .nav-cart {
+    margin-right: var(--space-xs);
+    padding: 8px;
+    background: var(--color-surface);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+  }
+
+  .nav-cart-badge {
+    top: -2px;
+    right: -2px;
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+  }
+
   .nav-overlay {
     position: fixed;
     inset: 0;

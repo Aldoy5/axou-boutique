@@ -23,13 +23,15 @@ function renderNavbar() {
           <a class="nav-link ${isActive('/')}" onclick="Router.navigate('/')">Accueil</a>
           <a class="nav-link ${isActive('/catalog')}" onclick="Router.navigate('/catalog')">Catalogue</a>
           <a class="nav-link ${isActive('/cart')}" onclick="Router.navigate('/cart')">Panier</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-md);">
           <div class="nav-cart" onclick="Router.navigate('/cart')">
             <span class="nav-cart-icon">🛒</span>
             ${cartCount > 0 ? `<span class="nav-cart-badge">${cartCount}</span>` : ''}
           </div>
-        </div>
-        <div class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()">
-          <span></span><span></span><span></span>
+          <div class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+          </div>
         </div>
       </div>
       <div class="nav-overlay" id="nav-overlay" onclick="toggleMobileMenu()"></div>

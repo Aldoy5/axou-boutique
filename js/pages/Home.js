@@ -104,7 +104,7 @@ function getCategoryIcon(catId) {
 function addToCartQuick(productId) {
   const success = Store.addToCart(productId, 1);
   if (success) {
-    showToast('Produit ajouté au panier !');
+    showToast('Produit ajouté au panier !', 'success', true);
     App.refresh();
   }
 }
