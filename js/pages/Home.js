@@ -25,7 +25,7 @@ function renderHome() {
         <div class="hero-content">
           <div class="hero-badge">✨ Nouvelle Collection</div>
           <h1>L'Élégance <br><span class="highlight">Redéfinie</span></h1>
-          <p>Découvrez notre sélection exclusive de produits de beauté, bijoux raffinés et pyjamas de luxe. Chaque pièce est soigneusement choisie pour vous offrir le meilleur.</p>
+          <p>Découvrez notre sélection exclusive de produits de haute qualité. Chaque pièce est soigneusement choisie pour vous offrir le meilleur de l'élégance et du confort.</p>
           <div class="hero-buttons">
             <button class="btn btn-primary btn-lg" onclick="Router.navigate('/catalog')">
               Explorer la Collection
