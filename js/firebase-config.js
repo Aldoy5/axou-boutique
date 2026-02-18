@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-    apiKey: "AIzaSyBe5r6Irj3vTFv0X7gj08JBvaOQXvJ9LNg",
+    apiKey: "AIzaSyBsvl-eF6mDfrMSOwVrN4j9m9bkjXh0WGA",
     authDomain: "axou-boutique.firebaseapp.com",
     databaseURL: "https://axou-boutique-default-rtdb.firebaseio.com",
     projectId: "axou-boutique",
