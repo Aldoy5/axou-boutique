@@ -73,7 +73,7 @@ function renderAdmin() {
                 <label>Catégorie</label>
                 <select class="form-select" id="admin-category" required>
                   <option value="">Sélectionner...</option>
-                  ${CATEGORIES.map(cat => `
+                  ${Store.getCategories().map(cat => `
                     <option value="${cat.id}" ${editProduct?.category === cat.id ? 'selected' : ''}>${cat.name}</option>
                   `).join('')}
                 </select>
@@ -125,6 +125,45 @@ function renderAdmin() {
             ${productListHTML.length > 0 ? productListHTML : '<p style="color: var(--color-text-dim);">Aucun produit</p>'}
 
             <div class="admin-settings-card" style="margin-top: var(--space-4xl); padding-top: var(--space-2xl); border-top: 1px solid var(--color-border);">
+              <h2>📂 Gestion des catégories</h2>
+              <div class="glass-card" style="padding: var(--space-xl); background: rgba(255,255,255,0.02); margin-bottom: var(--space-xl);">
+                <form id="category-form" onsubmit="event.preventDefault(); saveAdminCategory();" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                  <div class="form-group">
+                    <label>ID (ex: beaute)</label>
+                    <input class="form-input" type="text" id="cat-id" placeholder="id-unique" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Nom</label>
+                    <input class="form-input" type="text" id="cat-name" placeholder="Nom affiché" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Icône (Emoji)</label>
+                    <input class="form-input" type="text" id="cat-icon" placeholder="✨" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Description</label>
+                    <input class="form-input" type="text" id="cat-desc" placeholder="Courte description" required>
+                  </div>
+                  <div class="form-group" style="grid-column: span 2;">
+                    <label>Image URL</label>
+                    <input class="form-input" type="url" id="cat-image" placeholder="https://images.unsplash.com/..." required>
+                  </div>
+                  <button class="btn btn-primary" type="submit" style="grid-column: span 2;">Ajouter la catégorie</button>
+                </form>
+
+                <div class="category-list" style="margin-top: var(--space-xl);">
+                  <h3>Catégories existantes</h3>
+                  <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md);">
+                    ${Store.getCategories().map(cat => `
+                      <div class="glass-card" style="padding: var(--space-sm) var(--space-md); display: flex; align-items: center; gap: var(--space-md); font-size: 0.9rem;">
+                        <span>${cat.icon} <strong>${cat.name}</strong></span>
+                        <button class="btn btn-danger btn-sm" style="padding: 2px 6px;" onclick="deleteAdminCategory('${cat.id}')">🗑️</button>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+
               <h2>⚙️ Paramètres de sécurité</h2>
               <div class="glass-card" style="padding: var(--space-xl); background: rgba(255,255,255,0.02);">
                 <form onsubmit="event.preventDefault(); updateAdminPassword();">
@@ -249,6 +288,36 @@ function updateAdminPassword() {
           showToast('Erreur : ' + err.message, 'error');
         }
       });
+  }
+}
+
+function saveAdminCategory() {
+  const id = document.getElementById('cat-id').value.trim().toLowerCase().replace(/\s+/g, '-');
+  const name = document.getElementById('cat-name').value.trim();
+  const icon = document.getElementById('cat-icon').value.trim();
+  const description = document.getElementById('cat-desc').value.trim();
+  const image = document.getElementById('cat-image').value.trim();
+
+  if (!id || !name || !icon || !description || !image) {
+    showToast('Veuillez remplir tous les champs de la catégorie');
+    return;
+  }
+
+  showToast('Ajout de la catégorie...', 'success');
+  Store.addCategory({ id, name, icon, description, image })
+    .then(() => {
+      showToast('Catégorie ajoutée !');
+      App.refresh();
+    })
+    .catch(err => showToast(err.message, 'error'));
+}
+
+function deleteAdminCategory(id) {
+  if (confirm(`Supprimer la catégorie "${id}" ? Cela ne supprimera pas les produits associés mais ils n'auront plus de catégorie valide.`)) {
+    Store.deleteCategory(id).then(() => {
+      showToast('Catégorie supprimée');
+      App.refresh();
+    });
   }
 }
 

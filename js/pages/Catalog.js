@@ -22,7 +22,7 @@ function renderCatalog(params) {
 
   const filterButtons = [
     { id: 'all', label: 'Tous' },
-    ...CATEGORIES.map(c => ({ id: c.id, label: c.name }))
+    ...Store.getCategories().map(c => ({ id: c.id, label: c.name }))
   ];
 
   const filtersHTML = filterButtons.map(f => `

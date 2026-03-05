@@ -102,15 +102,31 @@ function renderProductDetail(params) {
               </div>
             </div>
 
-            <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="addDetailToCart('${product.id}')" ${product.stock <= 0 ? 'disabled' : ''}>
-              ${product.stock > 0 ? `🛒 Ajouter au panier — ${formatPrice(product.price * detailQuantity)}` : 'Rupture de stock'}
-            </button>
+            <div class="product-detail-actions" style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="addDetailToCart('${product.id}')" ${product.stock <= 0 ? 'disabled' : ''}>
+                ${product.stock > 0 ? `🛒 Ajouter au panier — ${formatPrice(product.price * detailQuantity)}` : 'Rupture de stock'}
+              </button>
+              
+              <button class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: var(--space-sm);" onclick="copyProductLink('${product.id}')">
+                <span>🔗</span> Partager ce produit
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
     ${relatedHTML}
   `;
+}
+
+function copyProductLink(productId) {
+  const url = window.location.origin + window.location.pathname + '#/product/' + productId;
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Lien de partage copié dans le presse-papier !', 'success');
+  }).catch(err => {
+    console.error('Erreur lors de la copie :', err);
+    showToast('Erreur lors de la copie du lien', 'error');
+  });
 }
 
 function changeDetailQty(delta, maxStock) {

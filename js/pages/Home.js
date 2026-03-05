@@ -4,8 +4,9 @@
 
 function renderHome() {
   const featured = Store.getFeatured();
+  const categories = Store.getCategories();
 
-  const categoriesHTML = CATEGORIES.map(cat => `
+  const categoriesHTML = categories.map(cat => `
     <div class="category-card" onclick="Router.navigate('/catalog/${cat.id}')">
       <div class="category-card-bg" style="background-image: url('${cat.image}')"></div>
       <div class="category-card-overlay"></div>
@@ -89,16 +90,6 @@ function renderProductCard(product) {
       </div>
     </div>
   `;
-}
-
-function getCategoryLabel(catId) {
-  const cat = CATEGORIES.find(c => c.id === catId);
-  return cat ? cat.name : catId;
-}
-
-function getCategoryIcon(catId) {
-  const cat = CATEGORIES.find(c => c.id === catId);
-  return cat ? cat.icon : '📦';
 }
 
 function addToCartQuick(productId) {

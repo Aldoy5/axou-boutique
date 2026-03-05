@@ -4,10 +4,12 @@
 
 const Store = (() => {
     const PRODUCTS_PATH = 'products';
+    const CATEGORIES_PATH = 'categories';
     const SETTINGS_PATH = 'settings';
     const CART_KEY = 'axou_boutique_cart';
 
     let _products = [];
+    let _categories = [];
     let _settings = {};
     let _user = null;
     let _cart = _loadCart();
@@ -38,6 +40,21 @@ const Store = (() => {
             _checkLoaded();
         });
 
+        // Categories Sync
+        const categoriesRef = window.fbRef(window.fbDB, CATEGORIES_PATH);
+        window.fbOnValue(categoriesRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                _categories = Object.keys(data).map(key => ({
+                    ...data[key],
+                    id: key
+                }));
+            } else {
+                seedCategories();
+            }
+            _checkLoaded();
+        });
+
         // Settings Sync (Supprimé car géré par Firebase Auth)
         _checkLoaded();
     }
@@ -55,6 +72,19 @@ const Store = (() => {
             const { id, ...data } = p;
             const productsRef = window.fbRef(window.fbDB, PRODUCTS_PATH);
             return window.fbPush(productsRef, data);
+        });
+        await Promise.all(promises);
+    }
+
+    async function seedCategories() {
+        console.log("Seeding database with demo categories...");
+        const promises = CATEGORIES.map(c => {
+            const { id, ...data } = c;
+            // Use set with ID to keep consistency with demo IDs if possible, 
+            // but usually push is better for dynamic stuff. 
+            // However, categories often have semantic IDs (beaute, pyjamas).
+            const categoryRef = window.fbRef(window.fbDB, `${CATEGORIES_PATH}/${id}`);
+            return window.fbSet(categoryRef, data);
         });
         await Promise.all(promises);
     }
@@ -288,5 +318,38 @@ const Store = (() => {
 
             return results;
         },
+
+        // --- Categories ---
+        getCategories() { return [..._categories]; },
+
+        async addCategory(category) {
+            const categoryRef = window.fbRef(window.fbDB, `${CATEGORIES_PATH}/${category.id}`);
+            await window.fbSet(categoryRef, {
+                name: category.name,
+                description: category.description,
+                icon: category.icon,
+                image: category.image
+            });
+        },
+
+        async deleteCategory(id) {
+            const categoryRef = window.fbRef(window.fbDB, `${CATEGORIES_PATH}/${id}`);
+            await window.fbRemove(categoryRef);
+        },
+
+        getCategoryLabel(catId) {
+            const cat = _categories.find(c => c.id === catId);
+            return cat ? cat.name : catId;
+        },
+
+        getCategoryIcon(catId) {
+            const cat = _categories.find(c => c.id === catId);
+            return cat ? cat.icon : '📦';
+        },
     };
 })();
+
+// Global helpers (moved from pages/Home.js for global use)
+function getCategoryLabel(catId) { return Store.getCategoryLabel(catId); }
+function getCategoryIcon(catId) { return Store.getCategoryIcon(catId); }
+function formatPrice(price) { return new Intl.NumberFormat('fr-FR').format(price) + ' FCFA'; }
