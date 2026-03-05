@@ -122,8 +122,17 @@ function renderProductDetail(params) {
                 ${product.stock > 0 ? `🛒 Ajouter au panier — ${formatPrice(product.price * detailQuantity)}` : 'Rupture de stock'}
               </button>
               
-              <button class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: var(--space-sm);" onclick="copyProductLink('${product.id}')">
-                <span>🔗</span> Partager ce produit
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                <button class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: var(--space-sm);" onclick="shareProduct('${product.id}')">
+                  <span>📤</span> Partager
+                </button>
+                <button class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: var(--space-sm); border-color: #25D366; color: #25D366;" onclick="shareOnWhatsApp('${product.id}')">
+                  <span>📱</span> WhatsApp
+                </button>
+              </div>
+
+              <button class="btn btn-sm" style="background: transparent; border: none; color: var(--color-text-dim); text-decoration: underline; font-size: 0.8rem; cursor: pointer;" onclick="copyProductLink('${product.id}')">
+                Copier seulement le lien
               </button>
             </div>
           </div>
@@ -132,6 +141,38 @@ function renderProductDetail(params) {
     </div>
     ${relatedHTML}
   `;
+}
+
+function shareProduct(productId) {
+  const product = Store.getProduct(productId);
+  let baseUrl = window.location.origin + window.location.pathname;
+  if (!baseUrl.endsWith('/')) baseUrl += '/';
+  const url = baseUrl + '#/product/' + productId;
+  const title = `Vérifie ce produit sur AXOU BOUTIQUE : ${product.name}`;
+  const text = `${product.description.slice(0, 100)}...`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      text: text,
+      url: url,
+    }).catch(err => {
+      console.log('User cancelled or error sharing:', err);
+    });
+  } else {
+    // Fallback to copy link
+    copyProductLink(productId);
+  }
+}
+
+function shareOnWhatsApp(productId) {
+  const product = Store.getProduct(productId);
+  let baseUrl = window.location.origin + window.location.pathname;
+  if (!baseUrl.endsWith('/')) baseUrl += '/';
+  const url = baseUrl + '#/product/' + productId;
+
+  const text = encodeURIComponent(`*${product.name}* sur AXOU BOUTIQUE\n\n${product.description.slice(0, 80)}...\n\nDécouvrez ici : ${url}`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
 }
 
 function copyProductLink(productId) {
