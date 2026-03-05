@@ -15,6 +15,8 @@ const Store = (() => {
     let _cart = _loadCart();
     let _listeners = [];
     let _isLoaded = false;
+    let _productsSynced = false;
+    let _categoriesSynced = false;
 
     // --- Firebase Sync ---
     function _initFirebaseSync() {
@@ -37,6 +39,7 @@ const Store = (() => {
             } else {
                 seedDatabase();
             }
+            _productsSynced = true;
             _checkLoaded();
         });
 
@@ -52,18 +55,16 @@ const Store = (() => {
             } else {
                 seedCategories();
             }
+            _categoriesSynced = true;
             _checkLoaded();
         });
-
-        // Settings Sync (Supprimé car géré par Firebase Auth)
-        _checkLoaded();
     }
 
     function _checkLoaded() {
-        // Simple check to consider loaded once we have products (even empty list)
-        // and settings are initialized
-        _isLoaded = true;
-        _notify();
+        if (_productsSynced && _categoriesSynced) {
+            _isLoaded = true;
+            _notify();
+        }
     }
 
     async function seedDatabase() {
