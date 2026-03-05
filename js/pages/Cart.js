@@ -31,8 +31,12 @@ function renderCart() {
 
     return `
       <div class="cart-item">
-        <img class="cart-item-image" src="${product.image}" alt="${product.name}"
-             onerror="this.style.background='var(--color-surface)'; this.src=''">
+        <div class="cart-item-image-wrapper img-loading" style="width: 100px; height: 100px; border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0;">
+          <img class="cart-item-image" src="${product.image}" alt="${product.name}"
+               style="width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease;"
+               onload="this.style.opacity='1'; this.parentElement.classList.remove('img-loading'); this.classList.add('img-loaded')"
+               onerror="this.style.background='var(--color-surface)'; this.src=''">
+        </div>
         <div class="cart-item-info">
           <div class="cart-item-name">${product.name}</div>
           <div class="cart-item-price">${formatPrice(product.price)}</div>
