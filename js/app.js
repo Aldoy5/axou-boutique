@@ -7,6 +7,10 @@ const App = (() => {
     let currentPage = null;
     let currentParams = {};
 
+    let _renderTimeout = null;
+    let _lastNavHTML = '';
+    let _lastFooterHTML = '';
+
     function render() {
         // Save focus and selection
         const activeId = document.activeElement ? document.activeElement.id : null;
@@ -38,13 +42,40 @@ const App = (() => {
                 pageContent = renderHome();
         }
 
-        appDiv.innerHTML = `
-      ${renderNavbar()}
-      <main>
-        ${pageContent}
-      </main>
-      ${currentPage !== 'checkout' || !checkoutState.submitted ? renderFooter() : ''}
-    `;
+        const navHTML = renderNavbar();
+        const footerHTML = (currentPage !== 'checkout' || !checkoutState.submitted) ? renderFooter() : '';
+
+        // If appDiv is empty, do a full render
+        if (!appDiv.innerHTML) {
+            appDiv.innerHTML = `
+                ${navHTML}
+                <main id="main-content">${pageContent}</main>
+                <div id="footer-container">${footerHTML}</div>
+            `;
+        } else {
+            // Update only what changed to prevent flickering
+            const mainContent = document.getElementById('main-content');
+            const footerContainer = document.getElementById('footer-container');
+            const navElement = document.getElementById('main-navbar');
+
+            if (navHTML !== _lastNavHTML) {
+                // If navbar HTML changed significantly, we update it
+                // Note: renderNavbar returns a full string, better to update the existing one if possible
+                // but for now, updating the innerHTML of a wrapper or the navbar itself
+                const existingNav = document.getElementById('main-navbar');
+                if (existingNav) {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = navHTML;
+                    existingNav.replaceWith(temp.firstElementChild);
+                }
+            }
+
+            if (mainContent) mainContent.innerHTML = pageContent;
+            if (footerContainer && footerHTML !== _lastFooterHTML) footerContainer.innerHTML = footerHTML;
+        }
+
+        _lastNavHTML = navHTML;
+        _lastFooterHTML = footerHTML;
 
         // Restore focus and selection
         if (activeId) {
@@ -59,7 +90,12 @@ const App = (() => {
     }
 
     function refresh() {
-        render();
+        // Debounce refresh to avoid multiple renders in the same frame (flicker)
+        if (_renderTimeout) cancelAnimationFrame(_renderTimeout);
+        _renderTimeout = requestAnimationFrame(() => {
+            render();
+            _renderTimeout = null;
+        });
     }
 
     function showPage(page, params = {}) {

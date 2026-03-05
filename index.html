@@ -12,14 +12,14 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index.css?v=1.0.1">
 </head>
 
 <body>
     <div id="app"></div>
 
     <script type="module">
-        import { firebaseConfig } from "./js/firebase-config.js";
+        import { firebaseConfig } from "./js/firebase-config.js?v=1.0.1";
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -46,18 +46,18 @@
         console.log("Firebase initialized with Auth");
     </script>
 
-    <script src="js/data.js"></script>
-    <script src="js/store.js"></script>
-    <script src="js/router.js"></script>
-    <script src="js/components/Navbar.js"></script>
-    <script src="js/components/Footer.js"></script>
-    <script src="js/pages/Home.js"></script>
-    <script src="js/pages/Catalog.js"></script>
-    <script src="js/pages/ProductDetail.js"></script>
-    <script src="js/pages/Cart.js"></script>
-    <script src="js/pages/Checkout.js"></script>
-    <script src="js/pages/Admin.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/data.js?v=1.0.1"></script>
+    <script src="js/store.js?v=1.0.1"></script>
+    <script src="js/router.js?v=1.0.1"></script>
+    <script src="js/components/Navbar.js?v=1.0.1"></script>
+    <script src="js/components/Footer.js?v=1.0.1"></script>
+    <script src="js/pages/Home.js?v=1.0.1"></script>
+    <script src="js/pages/Catalog.js?v=1.0.1"></script>
+    <script src="js/pages/ProductDetail.js?v=1.0.1"></script>
+    <script src="js/pages/Cart.js?v=1.0.1"></script>
+    <script src="js/pages/Checkout.js?v=1.0.1"></script>
+    <script src="js/pages/Admin.js?v=1.0.1"></script>
+    <script src="js/app.js?v=1.0.1"></script>
 </body>
 
 </html>

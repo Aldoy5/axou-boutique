@@ -120,7 +120,12 @@ function renderProductDetail(params) {
 }
 
 function copyProductLink(productId) {
-  const url = window.location.origin + window.location.pathname + '#/product/' + productId;
+  // Use a more robust way to build the link
+  // window.location.origin + window.location.pathname handles cases where the site is in a subfolder
+  let baseUrl = window.location.origin + window.location.pathname;
+  if (!baseUrl.endsWith('/')) baseUrl += '/';
+  const url = baseUrl + '#/product/' + productId;
+
   navigator.clipboard.writeText(url).then(() => {
     showToast('Lien de partage copié dans le presse-papier !', 'success');
   }).catch(err => {
