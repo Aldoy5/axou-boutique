@@ -664,6 +664,44 @@ ol {
   background: var(--color-bg) !important;
 }
 
+.fade-in {
+  animation: fadeInContent 0.5s ease forwards;
+}
+
+@keyframes fadeInContent {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Image Loading State */
+.img-loading {
+  position: relative;
+  background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-border) 50%, var(--color-surface) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite linear;
+}
+
+.img-loaded {
+  animation: fadeInImg 0.6s ease forwards;
+}
+
+@keyframes fadeInImg {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 /* --- Product Grid --- */
 .products-grid {
   display: grid;

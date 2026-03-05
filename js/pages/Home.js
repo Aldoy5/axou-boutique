@@ -30,18 +30,32 @@ function renderHome() {
           </div>
         </div>
       </section>
+      <section class="section">
+        <div class="container">
+          <div class="skeleton skeleton-title" style="max-width: 200px; height: 2rem; margin: 0 auto 3rem;"></div>
+          <div class="products-grid">
+            <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
+            <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
+            <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
+            <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
+          </div>
+        </div>
+      </section>
     `;
   }
 
   const categoriesHTML = categories.map(cat => `
     <div class="category-card" onclick="Router.navigate('/catalog/${cat.id}')">
-      <div class="category-card-bg" style="background-image: url('${cat.image}')"></div>
+      <div class="category-card-bg img-loading" style="background-image: url('${cat.image}')" 
+           onload="this.classList.replace('img-loading', 'img-loaded')"></div>
       <div class="category-card-overlay"></div>
       <div class="category-card-content">
         <h3>${cat.icon} ${cat.name}</h3>
         <p>${cat.description}</p>
         <span class="category-card-link">Découvrir la collection →</span>
       </div>
+      <!-- Hidden image to trigger category load -->
+      <img src="${cat.image}" style="display:none;" onload="this.previousElementSibling.previousElementSibling.previousElementSibling.classList.replace('img-loading', 'img-loaded')">
     </div>
   `).join('');
 
@@ -59,7 +73,7 @@ function renderHome() {
             <button class="btn btn-primary btn-lg" onclick="Router.navigate('/catalog')">
               Explorer la Collection
             </button>
-            <button class="btn btn-secondary btn-lg" onclick="Router.navigate('/catalog/beaute')">
+            <button class="btn btn-secondary btn-lg" onclick="Router.navigate('/catalog/featured')">
               Nos Bestsellers
             </button>
           </div>
@@ -99,8 +113,10 @@ function renderHome() {
 function renderProductCard(product) {
   return `
     <div class="product-card" onclick="Router.navigate('/product/${product.id}')">
-      <div class="product-card-image-wrapper">
+      <div class="product-card-image-wrapper img-loading">
         <img class="product-card-image" src="${product.image}" alt="${product.name}" 
+             style="opacity: 0;"
+             onload="this.style.opacity='1'; this.parentElement.classList.remove('img-loading'); this.classList.add('img-loaded')"
              onerror="this.parentElement.innerHTML='<div class=\\'img-placeholder\\'>${getCategoryIcon(product.category)}</div>'">
         ${product.featured ? '<span class="product-card-badge">Vedette</span>' : ''}
         ${product.stock <= 0 ? '<span class="product-card-badge" style="background: var(--color-danger); right: auto; left: var(--space-sm);">Rupture</span>' : ''}

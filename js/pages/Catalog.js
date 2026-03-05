@@ -37,11 +37,7 @@ function renderCatalog(params) {
   if (!isLoaded) {
     // Show 6 skeletons
     productsHTML = Array(6).fill(0).map(() => `
-      <div class="product-card">
-        <div class="skeleton skeleton-img"></div>
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-text"></div>
-      </div>
+      <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
     `).join('');
   } else if (products.length > 0) {
     productsHTML = products.map(p => renderProductCard(p)).join('');
@@ -56,8 +52,8 @@ function renderCatalog(params) {
   return `
     <div class="catalog-page">
       <div class="container">
-        <h1>Notre Catalogue ${!isLoaded ? '<span style="font-size: 1rem; color: var(--color-accent);">Chargement...</span>' : ''}</h1>
-        <p class="catalog-subtitle">Découvrez l'ensemble de nos produits premium</p>
+        <h1>${catalogState.category === 'featured' ? 'Nos Bestsellers' : 'Notre Catalogue'} ${!isLoaded ? '<span style="font-size: 1rem; color: var(--color-accent);">Chargement...</span>' : ''}</h1>
+        <p class="catalog-subtitle">${catalogState.category === 'featured' ? 'Nos coups de cœur, sélectionnés pour vous' : 'Découvrez l\'ensemble de nos produits premium'}</p>
 
         <div class="catalog-toolbar">
           <div class="catalog-filters">

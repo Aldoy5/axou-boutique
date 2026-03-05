@@ -81,8 +81,12 @@ function renderProductDetail(params) {
         <a class="back-link" onclick="Router.navigate('/catalog')">← Retour au catalogue</a>
         
         <div class="product-detail-layout">
-          <img class="product-detail-image" src="${product.image}" alt="${product.name}"
-               onerror="this.src=''; this.style.background='var(--color-surface)'; this.style.display='flex'; this.alt='${getCategoryIcon(product.category)}'">
+          <div class="product-detail-image-wrapper img-loading" style="border-radius: var(--radius-lg); overflow: hidden;">
+            <img class="product-detail-image" src="${product.image}" alt="${product.name}"
+                 style="opacity: 0; transition: opacity 0.6s ease;"
+                 onload="this.style.opacity='1'; this.parentElement.classList.remove('img-loading'); this.classList.add('img-loaded')"
+                 onerror="this.src=''; this.style.background='var(--color-surface)'; this.style.display='flex'; this.alt='${getCategoryIcon(product.category)}'">
+          </div>
           
           <div class="product-detail-info">
             <div class="product-detail-category">${getCategoryLabel(product.category)}</div>

@@ -59,9 +59,6 @@ const App = (() => {
             const navElement = document.getElementById('main-navbar');
 
             if (navHTML !== _lastNavHTML) {
-                // If navbar HTML changed significantly, we update it
-                // Note: renderNavbar returns a full string, better to update the existing one if possible
-                // but for now, updating the innerHTML of a wrapper or the navbar itself
                 const existingNav = document.getElementById('main-navbar');
                 if (existingNav) {
                     const temp = document.createElement('div');
@@ -70,7 +67,14 @@ const App = (() => {
                 }
             }
 
-            if (mainContent) mainContent.innerHTML = pageContent;
+            if (mainContent) {
+                // Add fade-out effect or just swap and fade-in
+                mainContent.classList.remove('fade-in');
+                // Trigger reflow
+                void mainContent.offsetWidth;
+                mainContent.innerHTML = pageContent;
+                mainContent.classList.add('fade-in');
+            }
             if (footerContainer && footerHTML !== _lastFooterHTML) footerContainer.innerHTML = footerHTML;
         }
 

@@ -293,9 +293,15 @@ const Store = (() => {
 
         // --- Search & Filter ---
         searchProducts(query, category, sortBy, minPrice = 0, maxPrice = Infinity) {
-            let results = category && category !== 'all'
-                ? _products.filter(p => p.category === category)
-                : [..._products];
+            let results = [];
+
+            if (category === 'featured') {
+                results = _products.filter(p => p.featured);
+            } else if (category && category !== 'all') {
+                results = _products.filter(p => p.category === category);
+            } else {
+                results = [..._products];
+            }
 
             if (minPrice > 0 || maxPrice < Infinity) {
                 results = results.filter(p => p.price >= minPrice && p.price <= maxPrice);
