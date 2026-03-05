@@ -20,6 +20,17 @@ const Store = (() => {
 
     // --- Firebase Sync ---
     function _initFirebaseSync() {
+        console.log("Initializing Firebase Sync...");
+
+        // Safety timeout: force loaded state after 5 seconds if sync is slow
+        setTimeout(() => {
+            if (!_isLoaded) {
+                console.warn("Sync timeout reached. Forcing loaded state.");
+                _isLoaded = true;
+                _notify();
+            }
+        }, 5000);
+
         // Auth Sync
         window.fbOnAuthStateChanged(window.fbAuth, (user) => {
             _user = user;
@@ -30,6 +41,7 @@ const Store = (() => {
         // Products Sync
         const productsRef = window.fbRef(window.fbDB, PRODUCTS_PATH);
         window.fbOnValue(productsRef, (snapshot) => {
+            console.log("Products received from Firebase");
             const data = snapshot.val();
             if (data) {
                 _products = Object.keys(data).map(key => ({
@@ -46,6 +58,7 @@ const Store = (() => {
         // Categories Sync
         const categoriesRef = window.fbRef(window.fbDB, CATEGORIES_PATH);
         window.fbOnValue(categoriesRef, (snapshot) => {
+            console.log("Categories received from Firebase");
             const data = snapshot.val();
             if (data) {
                 _categories = Object.keys(data).map(key => ({
