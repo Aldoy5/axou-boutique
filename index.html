@@ -32,12 +32,21 @@
         import { firebaseConfig } from "./js/firebase-config.js?v=1.0.1";
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const auth = getAuth(app);
+
+        // Configure session persistence (cleared when browser/tab is closed)
+        setPersistence(auth, browserSessionPersistence)
+            .then(() => {
+                console.log("Persistence set to session");
+            })
+            .catch((error) => {
+                console.error("Persistence error:", error);
+            });
 
         // Make Firebase functions available globally for our legacy scripts
         window.fbDB = db;

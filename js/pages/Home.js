@@ -3,8 +3,35 @@
    ============================================ */
 
 function renderHome() {
+  const isLoaded = Store.isLoaded();
   const featured = Store.getFeatured();
   const categories = Store.getCategories();
+
+  if (!isLoaded) {
+    return `
+      <section class="hero hero-skeleton">
+        <div class="container">
+          <div class="skeleton skeleton-title" style="max-width: 500px; height: 3rem; margin-bottom: 2rem;"></div>
+          <div class="skeleton skeleton-text" style="max-width: 400px; height: 1.2rem; margin-bottom: 1rem;"></div>
+          <div class="skeleton skeleton-text" style="max-width: 350px; height: 1.2rem; margin-bottom: 2.5rem;"></div>
+          <div style="display: flex; gap: 1rem;">
+             <div class="skeleton skeleton-btn" style="width: 180px; height: 48px;"></div>
+             <div class="skeleton skeleton-btn" style="width: 180px; height: 48px;"></div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container">
+          <div class="skeleton skeleton-title" style="max-width: 250px; height: 2rem; margin: 0 auto 3rem;"></div>
+          <div class="categories-grid">
+            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
+            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
+            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
 
   const categoriesHTML = categories.map(cat => `
     <div class="category-card" onclick="Router.navigate('/catalog/${cat.id}')">
@@ -13,6 +40,7 @@ function renderHome() {
       <div class="category-card-content">
         <h3>${cat.icon} ${cat.name}</h3>
         <p>${cat.description}</p>
+        <span class="category-card-link">Découvrir la collection →</span>
       </div>
     </div>
   `).join('');
