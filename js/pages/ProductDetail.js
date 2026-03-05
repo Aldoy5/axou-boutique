@@ -25,7 +25,22 @@ function getSocialMetrics(productId) {
 }
 
 function renderProductDetail(params) {
+  const isLoaded = Store.isLoaded();
   const product = Store.getProduct(params.id);
+
+  if (!isLoaded) {
+    return `
+      <div class="product-detail">
+        <div class="container">
+          <div class="loading-state" style="padding: var(--space-4xl) 0; text-align: center;">
+            <div class="skeleton skeleton-img" style="max-width: 400px; height: 400px; margin: 0 auto var(--space-xl);"></div>
+            <div class="skeleton skeleton-title" style="max-width: 300px; margin: 0 auto var(--space-md);"></div>
+            <div class="skeleton skeleton-text" style="max-width: 200px; margin: 0 auto;"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   if (!product) {
     return `
