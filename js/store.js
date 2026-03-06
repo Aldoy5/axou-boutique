@@ -9,7 +9,7 @@ const Store = (() => {
     const CART_KEY = 'axou_boutique_cart';
 
     let _products = [];
-    let _categories = [];
+    let _categories = (typeof CATEGORIES !== 'undefined') ? [...CATEGORIES] : [];
     let _settings = {};
     let _user = null;
     let _cart = _loadCart();
@@ -60,15 +60,28 @@ const Store = (() => {
         window.fbOnValue(categoriesRef, (snapshot) => {
             console.log("Categories received from Firebase");
             const data = snapshot.val();
-            if (data && Object.keys(data).length > 0) {
-                _categories = Object.keys(data).map(key => ({
+
+            if (data && typeof data === 'object') {
+                const cloudCategories = Object.keys(data).map(key => ({
                     ...data[key],
                     id: key
                 }));
-            } else {
-                console.warn("No categories found, seeding...");
-                seedCategories();
+
+                if (cloudCategories.length > 0) {
+                    _categories = cloudCategories;
+                } else if (_categories.length === 0) {
+                    seedCategories();
+                }
+            } else if (!data) {
+                // If cloud is empty and we don't have local data yet or want to force seed
+                if (_categories.length === 0) {
+                    seedCategories();
+                } else {
+                    // Seed the cloud with our local categories
+                    seedCategories();
+                }
             }
+
             _categoriesSynced = true;
             _checkLoaded();
         });
