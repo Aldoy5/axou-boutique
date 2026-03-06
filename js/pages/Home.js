@@ -20,16 +20,7 @@ function renderHome() {
           </div>
         </div>
       </section>
-      <section class="section">
-        <div class="container">
-          <div class="skeleton skeleton-title" style="max-width: 250px; height: 2rem; margin: 0 auto 3rem;"></div>
-          <div class="categories-grid">
-            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
-            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
-            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
-          </div>
-        </div>
-      </section>
+      <!-- Featured Products Skeleton (NOW FIRST) -->
       <section class="section">
         <div class="container">
           <div class="skeleton skeleton-title" style="max-width: 200px; height: 2rem; margin: 0 auto 3rem;"></div>
@@ -38,6 +29,17 @@ function renderHome() {
             <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
             <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
             <div class="product-card skeleton" style="height: 400px; border:none; background:none;"></div>
+          </div>
+        </div>
+      </section>
+      <!-- Categories Skeleton (NOW SECOND) -->
+      <section class="section">
+        <div class="container">
+          <div class="skeleton skeleton-title" style="max-width: 250px; height: 2rem; margin: 0 auto 3rem;"></div>
+          <div class="categories-grid">
+            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
+            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
+            <div class="skeleton category-card-skeleton" style="height: 380px;"></div>
           </div>
         </div>
       </section>
@@ -81,18 +83,7 @@ function renderHome() {
       </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">Nos Catégories</h2>
-        <p class="section-subtitle">Explorez nos collections soigneusement curatées</p>
-        <div class="categories-grid">
-          ${categoriesHTML}
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Products Section -->
+    <!-- Featured Products Section (NOW FIRST) -->
     <section class="section featured-section">
       <div class="container">
         <h2 class="section-title">Produits Vedettes</h2>
@@ -104,6 +95,17 @@ function renderHome() {
           <button class="btn btn-secondary btn-lg" onclick="Router.navigate('/catalog')">
             Voir tout le catalogue →
           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section (NOW SECOND) -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Nos Catégories</h2>
+        <p class="section-subtitle">Explorez nos collections soigneusement curatées</p>
+        <div class="categories-grid">
+          ${categoriesHTML}
         </div>
       </div>
     </section>
