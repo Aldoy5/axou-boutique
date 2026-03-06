@@ -152,6 +152,7 @@ const Store = (() => {
         seedDatabase,
 
         // --- Auth ---
+        getUser() { return _user; },
         isAdminLoggedIn() {
             return !!_user;
         },

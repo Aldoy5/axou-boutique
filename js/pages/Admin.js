@@ -184,6 +184,14 @@ function renderAdmin() {
                   </button>
                 </form>
               </div>
+
+              <h2 style="margin-top: var(--space-xl);">🔍 Diagnostic Permissions</h2>
+              <div class="glass-card" style="padding: var(--space-xl); background: rgba(0,0,0,0.1); border: 1px dashed var(--color-accent);">
+                <p><strong>Votre UID :</strong> <code id="diag-uid">${Store.getUser()?.uid || 'Non connecté'}</code></p>
+                <div id="diag-result" style="margin-top: var(--space-md);">
+                   <button class="btn btn-sm btn-secondary" onclick="checkAdminPermissions()">Tester les permissions</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
