@@ -48,9 +48,8 @@ const Store = (() => {
                     ...data[key],
                     id: key
                 }));
-            } else {
-                seedDatabase();
             }
+            // Auto-seeding removed for stability. Use Admin panel to seed defaults.
             _productsSynced = true;
             _checkLoaded();
         });
@@ -69,18 +68,10 @@ const Store = (() => {
 
                 if (cloudCategories.length > 0) {
                     _categories = cloudCategories;
-                } else if (_categories.length === 0) {
-                    seedCategories();
-                }
-            } else if (!data) {
-                // If cloud is empty and we don't have local data yet or want to force seed
-                if (_categories.length === 0) {
-                    seedCategories();
-                } else {
-                    // Seed the cloud with our local categories
-                    seedCategories();
                 }
             }
+            // Note: Auto-seeding removed to prevent infinite loops when permissions are denied.
+            // Use the manual "Importer catégories" button in Admin instead.
 
             _categoriesSynced = true;
             _checkLoaded();
