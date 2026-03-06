@@ -72,7 +72,10 @@ function renderAdmin() {
               <div class="form-group">
                 <label>Catégorie</label>
                 <select class="form-select" id="admin-category" required>
-                  <option value="">Sélectionner...</option>
+                  ${Store.getCategories().length === 0
+      ? `<option value="">⚠️ Aucune catégorie (importez-les en bas)</option>`
+      : `<option value="">Sélectionner...</option>`
+    }
                   ${Store.getCategories().map(cat => `
                     <option value="${cat.id}" ${editProduct?.category === cat.id ? 'selected' : ''}>${cat.name}</option>
                   `).join('')}

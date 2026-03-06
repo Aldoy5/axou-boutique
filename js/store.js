@@ -60,12 +60,13 @@ const Store = (() => {
         window.fbOnValue(categoriesRef, (snapshot) => {
             console.log("Categories received from Firebase");
             const data = snapshot.val();
-            if (data) {
+            if (data && Object.keys(data).length > 0) {
                 _categories = Object.keys(data).map(key => ({
                     ...data[key],
                     id: key
                 }));
             } else {
+                console.warn("No categories found, seeding...");
                 seedCategories();
             }
             _categoriesSynced = true;
@@ -91,16 +92,23 @@ const Store = (() => {
     }
 
     async function seedCategories() {
+        if (!window.fbDB || !window.fbSet || !window.fbRef) {
+            console.error("Firebase not ready for seeding categories");
+            return;
+        }
+        if (typeof CATEGORIES === 'undefined') {
+            console.error("CATEGORIES data not found in data.js");
+            return;
+        }
+
         console.log("Seeding database with demo categories...");
         const promises = CATEGORIES.map(c => {
             const { id, ...data } = c;
-            // Use set with ID to keep consistency with demo IDs if possible, 
-            // but usually push is better for dynamic stuff. 
-            // However, categories often have semantic IDs (beaute, pyjamas).
             const categoryRef = window.fbRef(window.fbDB, `${CATEGORIES_PATH}/${id}`);
             return window.fbSet(categoryRef, data);
         });
         await Promise.all(promises);
+        console.log("Categories seeded successfully");
     }
 
     // Initialize sync
