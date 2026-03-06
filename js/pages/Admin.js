@@ -177,7 +177,7 @@ function renderAdmin() {
                 <form onsubmit="event.preventDefault(); updateAdminPassword();">
                   <div class="form-group">
                     <label>Nouveau mot de passe admin</label>
-                    <input class="form-input" type="password" id="new-admin-pass" placeholder="Entrez le nouveau mot de passe" required>
+                    <input class="form-input" type="password" id="new-admin-pass" placeholder="Entrez le nouveau mot de passe" autocomplete="new-password" required>
                   </div>
                   <button class="btn btn-secondary" type="submit" style="margin-top: var(--space-md);">
                     Mettre à jour le mot de passe
@@ -379,7 +379,7 @@ function renderAdminLogin() {
             </div>
             <div class="form-group">
               <label>Mot de passe</label>
-              <input class="form-input" type="password" id="admin-pass-input" placeholder="Entrez votre mot de passe" required>
+              <input class="form-input" type="password" id="admin-pass-input" placeholder="Entrez votre mot de passe" autocomplete="current-password" required>
             </div>
             <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: var(--space-lg);">
               Se connecter
