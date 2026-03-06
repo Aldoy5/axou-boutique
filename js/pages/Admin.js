@@ -118,9 +118,14 @@ function renderAdmin() {
           <div class="admin-products-list">
             <div class="admin-list-header">
               <h2>Produits existants (${products.length})</h2>
-              <button class="btn btn-secondary btn-sm" onclick="seedDefaultProducts()">
-                📥 Importer défauts
-              </button>
+              <div style="display: flex; gap: var(--space-sm);">
+                <button class="btn btn-secondary btn-sm" onclick="seedDefaultCategories()">
+                  📂 Importer catégories
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="seedDefaultProducts()">
+                  📥 Importer défauts
+                </button>
+              </div>
             </div>
             ${productListHTML.length > 0 ? productListHTML : '<p style="color: var(--color-text-dim);">Aucun produit</p>'}
 
@@ -185,6 +190,7 @@ function renderAdmin() {
 }
 
 function saveAdminProduct() {
+  const editProduct = adminEditId ? Store.getProduct(adminEditId) : null;
   const name = document.getElementById('admin-name').value.trim();
   const description = document.getElementById('admin-desc').value.trim();
   const price = parseInt(document.getElementById('admin-price').value) || 0;
@@ -259,6 +265,19 @@ function seedDefaultProducts() {
     showToast('Importation en cours...');
     Store.seedDatabase().then(() => {
       showToast('Produits par défaut importés !');
+    }).catch(err => {
+      console.error(err);
+      showToast('Erreur lors de l\'importation', 'error');
+    });
+  }
+}
+
+function seedDefaultCategories() {
+  if (confirm('Voulez-vous importer les catégories par défaut ?')) {
+    showToast('Importation en cours...');
+    Store.seedCategories().then(() => {
+      showToast('Catégories importées !');
+      App.refresh();
     }).catch(err => {
       console.error(err);
       showToast('Erreur lors de l\'importation', 'error');

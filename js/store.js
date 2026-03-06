@@ -259,7 +259,7 @@ const Store = (() => {
                     _cart.push({ id: productId, quantity: stock });
                 }
                 _saveCart();
-                _notifySubscribers();
+                _notify();
                 return false;
             } else {
                 if (existing) {
@@ -268,7 +268,7 @@ const Store = (() => {
                     _cart.push({ id: productId, quantity });
                 }
                 _saveCart();
-                _notifySubscribers();
+                _notify();
                 return true;
             }
         },
@@ -289,7 +289,7 @@ const Store = (() => {
                 if (existing) existing.quantity = quantity;
             }
             _saveCart();
-            _notifySubscribers();
+            _notify();
         },
 
         removeFromCart(productId) {
@@ -301,8 +301,6 @@ const Store = (() => {
             _cart = [];
             _saveCart();
         },
-
-        isLoaded() { return _isLoaded; },
 
         // --- Search & Filter ---
         searchProducts(query, category, sortBy, minPrice = 0, maxPrice = Infinity) {
@@ -366,6 +364,8 @@ const Store = (() => {
             const cat = _categories.find(c => c.id === catId);
             return cat ? cat.icon : '📦';
         },
+
+        seedCategories,
     };
 })();
 
